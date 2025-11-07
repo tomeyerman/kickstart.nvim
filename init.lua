@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -283,6 +283,7 @@ require('lazy').setup({
       },
     },
   },
+  { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -938,30 +939,46 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  { -- Highlight, edit, and navigate code
+  -- { -- Highlight, edit, and navigate code
+  --   'nvim-treesitter/nvim-treesitter',
+  --   build = ':TSUpdate',
+  --   main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+  --   -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+  --   opts = {
+  --     ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+  --     -- Autoinstall languages that are not installed
+  --     auto_install = true,
+  --     highlight = {
+  --       enable = true,
+  --       -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+  --       --  If you are experiencing weird indenting issues, add the language to
+  --       --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+  --       additional_vim_regex_highlighting = { 'ruby' },
+  --     },
+  --     indent = { enable = true, disable = { 'ruby' } },
+  --     compilers = { "clang", "gcc" }
+  --   },
+  --   -- There are additional nvim-treesitter modules that you can use to interact
+  --   -- with nvim-treesitter. You should go explore a few and see what interests you:
+  --   --
+  --   --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+  --   --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+  --   --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  -- },
+  {
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    lazy = false,
+    branch = 'main',
+    build = ':TSUpdate'
+  },
+
+  {
+    "seblyng/roslyn.nvim",
+    ---@module 'roslyn.config'
+    ---@type RoslynNvimConfig
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+        -- your configuration comes here; leave empty for default settings
+    }
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -1011,6 +1028,44 @@ require('lazy').setup({
     },
   },
 })
+
+require'nvim-treesitter'.install { 'rust', 'javascript', 'zig', 'c_sharp', 'c', 'lua', 'vim', 'vimdoc', 'query', 'markdown', 'markdown_inline' }
+
+require("mason").setup({
+    registries = {
+        "github:mason-org/mason-registry",
+        "github:Crashdummyy/mason-registry",
+    },
+})
+--require'nvim-treesitter'.install { 'rust', 'c_sharp', 'zig', 'c', 'lua', 'vim', 'vimdoc', 'query', 'markdown', 'markdown_inline' }
+
+-- require("nvim-treesitter.install").compilers = { "clang" }
+-- require'nvim-treesitter.configs'.setup {
+--   -- A list of parser names, or "all" (the listed parsers MUST always be installed)
+--   ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "c_sharp" },
+
+--   -- Install parsers synchronously (only applied to `ensure_installed`)
+--   sync_install = false,
+
+--   -- Automatically install missing parsers when entering buffer
+--   -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+--   auto_install = true,
+
+--   -- List of parsers to ignore installing (or "all")
+--   ignore_install = { "javascript" },
+
+--   ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+--   -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+
+--   highlight = {
+--     enable = true,
+--     -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+--     --  If you are experiencing weird indenting issues, add the language to
+--     --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+--     additional_vim_regex_highlighting = false,
+--   },
+--   indent = { enable = true },
+-- }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
